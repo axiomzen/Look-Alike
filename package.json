@@ -1,0 +1,32 @@
+{
+  "name": "Look-Alike",
+  "version": "0.0.0",
+  "description": "Twin brother of Alike. They look quite alike. Except this brother is more heavy-weight and likes playing in trees.",
+  "main": "lib/main.js",
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/axiomzen/Look-Alike"
+  },
+  "keywords": [
+    "knn",
+    "kd-tree",
+    "Machine",
+    "Learning",
+    "Recommender",
+    "Systems",
+    "Nearest",
+    "Neighbor",
+    "recommendation",
+    "similarity"
+  ],
+  "author": "mck- <kuomarc2@gmail.com>",
+  "license": "LGPL",
+  "devDependencies": {
+    "coffee-script": "~1.6.3",
+    "mocha": "~1.12.0",
+    "chai": "~1.7.2"
+  }
+}
