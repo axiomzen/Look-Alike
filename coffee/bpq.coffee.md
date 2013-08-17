@@ -10,13 +10,27 @@ A naive implementation for a (Min) Priority Queue with an upper-bound. Will main
 - getMinPriority( ) - Returns the smallest priority in queue.
 - getObjects( ) - Returns Array of all objects in queue.
 
+#### Code:
+
+Class definition with some "private" variables
+
+    class BPQ
+      _queue: []
+      _bound: Infinity
 
 **constructor**: (size) - Returns an instance of BPQ with maximum length of _size_
 
-    class BPQ
-      @_queue: []
+      constructor: (@size) ->
 
-      constructor: (size) ->
-        @_size = size
+**insert**: (obj, priority) - Inserts the object into the queue, only if the priority is lower than the highest priority already in the queue. If so, the highest priority in the queue will be replaced with the new object.
+
+      insert: (obj, priority) =>
+        if priority < @_bound
+          @_queue.push obj
+
+**getObjects**: Returns the queue as an Array
+
+      getObjects: () ->
+        @_queue
 
     module.exports = BPQ
