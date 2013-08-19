@@ -1,62 +1,51 @@
 Bounded Priority Queue
 -----------
 
-A naive implementation for a (Min) Priority Queue with an upper-bound. Will maintain the max size while replacing the object in the queue with highest priority. TODO: Performance can be improved by using a heap.
+A naive implementation for a (Min) Priority Queue with an upper-bound. Will maintain the max size while replacing the object in the queue with highest priority.
 
 #### Instance methods:
 
-- insert(object, priority) - Inserts object in priority queue if it is lower than the max priority in queue.
+- insert(object, priority) - Inserts object in priority queue.
 - getMaxPriority( ) - Returns the largest priority in queue.
 - getMinPriority( ) - Returns the smallest priority in queue.
-- getObjects( ) - Returns Array of all objects in queue.
+- getObjects( ) - Returns Array of all objects in queue -- length depends on size upon construction.
 
 #### Code:
 
 Class definition with some "private" variables
 
+    Heap = require 'heap'
+
     class BPQ
-      _bound = -1
+      _cmp = (a, b) -> a.priority - b.priority
 
 **constructor**: (size) - Returns an instance of BPQ with maximum length of _size_. Stores `@size` and @queue as instance variables.
 
       constructor: (@size) ->
-        @queue = []
+        @queue = new Heap _cmp
 
-**insert**: (obj, priority) - Inserts the object into the queue, only if the priority is lower than the highest priority already in the queue. If so, the highest priority in the queue will be replaced with the new object.
+**insert**: (obj, priority) - Inserts the object onto the heap.
 
-      insert: (obj, priority) =>
-
-If the queue is not full yet, we can just push the object in the queue and set `_bound` if the new priority is larger than current `_bound`. Resort `@queue` to maintain order.
-
-        if @queue.length < @size
-          @queue.push
-            obj: obj
-            priority: priority
-          _bound = priority if priority > _bound
-          @queue.sort (a,b) -> a.priority - b.priority
-
-If the queue is full, we need to find the object with the highest priority and swap it out for the new object -- and set the new `_bound`. Only if the priority of the new object is smaller than the current max priority, will we do this.
-
-        else if priority < _bound
-          @queue[@size - 1] =
-            obj: obj
-            priority: priority
-          _bound = priority
-          @queue.sort (a,b) -> a.priority - b.priority
+      insert: (obj, priority) ->
+        @queue.push
+          obj: obj
+          priority: priority
 
 **getObjects**: Returns the queue as an Array
 
       getObjects: () ->
-        (x.obj for x in @queue)
+        tmp = Heap.nsmallest @queue.toArray(), @size, _cmp
+        (x.obj for x in tmp)
 
 **getMaxPriority**: Returns the value of the highest priority in the queue
 
       getMaxPriority: () ->
-        Math.max.apply null, (x.priority for x in @queue)
+        tmp = Heap.nsmallest @queue.toArray(), @size, _cmp
+        tmp.pop().priority
 
-**getMinPriority**: Returns the value of the highest priority in the queue
+**getMinPriority**: Returns the value of the lowest priority in the queue
 
       getMinPriority: () ->
-        Math.min.apply null, (x.priority for x in @queue)
+        @queue.top().priority
 
     module.exports = BPQ
