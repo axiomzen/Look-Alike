@@ -40,4 +40,9 @@ Class definition with some "private" variables
       getMaxPriority: () ->
         Math.max.apply null, (x.priority for x in @_queue)
 
+**getMinPriority**: Returns the value of the highest priority in the queue
+
+      getMinPriority: () ->
+        Math.min.apply null, (x.priority for x in @_queue)
+
     module.exports = BPQ
