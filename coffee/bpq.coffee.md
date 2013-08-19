@@ -26,11 +26,18 @@ Class definition with some "private" variables
 
       insert: (obj, priority) =>
         if priority < @_bound
-          @_queue.push obj
+          @_queue.push
+            obj: obj
+            priority: priority
 
 **getObjects**: Returns the queue as an Array
 
       getObjects: () ->
-        @_queue
+        (x.obj for x in @_queue)
+
+**getMaxPriority**: Returns the value of the highest priority in the queue
+
+      getMaxPriority: () ->
+        Math.max.apply null, (x.priority for x in @_queue)
 
     module.exports = BPQ
