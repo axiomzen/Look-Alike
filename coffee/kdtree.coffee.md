@@ -58,12 +58,48 @@ Now that we have our KD-tree fully built, we are ready to perform Nearest Neighb
 
 Initialize a BPQ with size `k`.
 
-Start at the root and do the following:
+        BPQ = require './bpq'
+        Q = new BPQ k
+
+        _helper = (node, depth) =>
+          return null unless node
+
+`depth` determines which attribute we are checking now
+
+          len = @keys.length
+          key = @keys[depth % len]
 
  - Insert the current node into the queue, with priority being the distance between point and subject
+
+          dist = require('./util').distance subject, node.val
+          Q.insert node.val, dist
+
  - Recursively search the half of the tree that contains the test point (on the next dimension)
- - If the BPQ is not full yet **or**
- - if the distance between current point and subject along the current dimension is less than the largest distance in our BPQ
+
+          goLeft = subject[key] < node.val[key]
+          if goLeft
+            _helper node.left, depth + 1
+          else
+            _helper node.right, depth + 1
+
+ - If the BPQ is not full yet **or** if the distance between current point and subject along the current dimension is less than the largest distance in our BPQ
+
+          if k > Q.getSize() or Math.abs(node.val[key] - subject[key]) < Q.getMaxPriority()
+
  - then recursively search the other half as well (on the next dimension)
+
+            if goLeft
+              _helper node.right, depth + 1
+            else
+              _helper node.left, depth + 1
+
+ - return Q
+
+          Q.getObjects()
+
+Start at the root:
+
+        root = @getRoot()
+        _helper root, 0
 
     module.exports = KDtree

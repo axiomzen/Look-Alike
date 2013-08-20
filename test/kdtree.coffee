@@ -80,6 +80,7 @@ describe "KD-tree", ->
         #console.log require('util').inspect tree.getRoot(), colors: true, depth: 5
 
       it 'should return the nearest neighbor', ->
-        tree.query(profile1).label.should.eql('C')
-        tree.query(profile2).label.should.eql('E')
-        tree.query(profile3).label.should.eql('J')
+        #console.log tree.query(profile1)
+        tree.query(profile1)[0].label.should.eql('C')
+        tree.query(profile2)[0].label.should.eql('E')
+        tree.query(profile3)[0].label.should.eql('J')
