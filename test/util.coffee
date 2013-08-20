@@ -1,13 +1,13 @@
 should = require('chai').should()
 utils = require '../coffee/util'
 
-describe 'Squared Euclidean Distance function', ->
+describe 'Euclidean Distance function', ->
   it 'should calculate correctly for 1 dimension', ->
-    utils.distance({ a: 1 }, { a: 5 }).should.eql(16)
+    utils.distance({ a: 1 }, { a: 5 }).should.eql(4)
   it 'should calculate correctly for 2 dimensions', ->
-    utils.distance({ a: 1, b: 3 }, { a: 5, b: 5 }).should.eql(20)
+    utils.distance({ a: 1, b: 3 }, { a: 5, b: 5 }).should.eql(Math.sqrt 20)
   it 'should calculate correctly for 3 dimensions', ->
-    utils.distance({ a: 1, b: 3 , c: -2}, { a: 5, b: 5, c: 2 }).should.eql(36)
+    utils.distance({ a: 1, b: 3 , c: -2}, { a: 5, b: 5, c: 2 }).should.eql(Math.sqrt 36)
 
 describe 'Standard Deviation', ->
   it 'should be 0 with array of equal numbers', ->
@@ -31,9 +31,9 @@ describe 'Standard Deviations on data', ->
 
 describe 'Standardized Euclidean Distance function', ->
   it 'should accept 2 objects and the stdv for 1 dimension', ->
-    utils.distance({ a: 1 }, { a: 5 }, { stdv: { a: 2 } }).should.eql(4)
+    utils.distance({ a: 1 }, { a: 5 }, { stdv: { a: 2 } }).should.eql(2)
   it 'should calculate correctly for 2 dimensions', ->
-    utils.distance({ a: 1, b: 30 }, { a: 5, b: 50 }, { stdv: { a: 2, b: 10 } }).should.eql(8)
+    utils.distance({ a: 1, b: 30 }, { a: 5, b: 50 }, { stdv: { a: 2, b: 10 } }).should.eql(Math.sqrt 8)
 
 describe.skip 'Standardize', ->
   it 'returns the array in units of stdv from mean', ->

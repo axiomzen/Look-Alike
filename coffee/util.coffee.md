@@ -3,7 +3,7 @@ Utilities
 
 ####  Euclidean distance function
 
-Takes 2 objects, and returns squared Euclidean distance based on the first object attributes
+Takes 2 objects, and returns Euclidean distance based on the first object attributes
 e.g. p1 = {a: 1} and p2 = {a: 2, b: 3, c: 5} will ignore extra attributes on p2 and return 1
 All attributes on p1 MUST be present in p2 (otherwise will be inaccurate if ignored)
 Accepts optional third argument, which is an options hash:
@@ -27,7 +27,7 @@ Accepts optional third argument, which is an options hash:
           y *= opts.weights[attr]
 
         dist += Math.pow x - y, 2
-      dist
+      Math.sqrt dist
 
 ####  Standard Deviation
 
