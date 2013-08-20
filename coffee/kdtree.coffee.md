@@ -10,7 +10,6 @@ Sources [1](http://andrewd.ces.clemson.edu/courses/cpsc805/references/nearest_se
 The constructor of the KD-tree expects an array of objects which have the same attributes. Optionally as a second argument, you may provide an array of attribute keys you would like to index.
 
     class KDtree
-      _tree = null
       _helper = (objects, key) ->
         return null unless objects.length
         objects.sort (a,b) -> a[key] - b[key]
@@ -21,10 +20,10 @@ The constructor of the KD-tree expects an array of objects which have the same a
           right: _helper(objects.slice(median + 1), key)
 
       constructor: (@objects, @attr) ->
-        _tree = _helper @objects, "a"
+        @_tree = _helper @objects, "a"
 
       getRoot: () ->
-        _tree
+        @_tree
 
 Looping over each attribute in a round-robin fashion, do the following:
 
