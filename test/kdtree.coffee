@@ -63,6 +63,8 @@ describe "KD-tree", ->
       expect(tree.getRoot().right.right.left.val).to.deep.equal {label: 'd', x:5, y:5, z:5}
 
   describe "querying k-Nearest Neighbors", ->
+    getLabels = (results) ->
+      (r.label for r in results)
     describe 'with basic testCase', ->
       testCase = require './test-cases/simple'
       objects = testCase.objects
@@ -84,3 +86,16 @@ describe "KD-tree", ->
         tree.query(profile1)[0].label.should.eql('C')
         tree.query(profile2)[0].label.should.eql('E')
         tree.query(profile3)[0].label.should.eql('J')
+
+      it 'should return 3 nearest neighbors, sorted by distance', ->
+        getLabels(tree.query(profile1, 3)).should.eql(['C', 'H', 'A'])
+        getLabels(tree.query(profile2, 3)).should.eql(['E', 'F', 'A'])
+        getLabels(tree.query(profile3, 3)).should.eql(['J', 'L', 'G'])
+
+      it 'should return all objects sorted by distance', ->
+        getLabels(tree.query(profile1, 20)).should.eql
+        ['C', 'H', 'A', 'E', 'K', 'F', 'D', 'I', 'G', 'B', 'L', 'J']
+        getLabels(tree.query(profile2, 20)).should.eql
+        ['E', 'F', 'A', 'H', 'D', 'C', 'G', 'I', 'K', 'J', 'B', 'L']
+        getLabels(tree.query(profile3, 20)).should.eql
+        ['J', 'L', 'G', 'I', 'F', 'D', 'E', 'B', 'H', 'K', 'A', 'C']
