@@ -47,4 +47,23 @@ With our `_helper` function defined, we can now trigger the tree to be build.
 
         @_tree = _helper @objects, 0
 
+#### Querying the tree:
+
+Now that we have our KD-tree fully built, we are ready to perform Nearest Neighborhood queries. We will use a Bounded Priority Queue to store the best nodes found so far. The size of this queue is passed as the second parameter in the query call. The query call expects the following parameters:
+
+  - Subject[Object] - The reference point that we want to find the Nearest Neighbors of -- must have all `@keys` defined.
+  - k[Int] - The number of objects to return, defaults to 1. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
+
+      query: (subject, k = 1) ->
+
+Initialize a BPQ with size `k`.
+
+Start at the root and do the following:
+
+ - Insert the current node into the queue, with priority being the distance between point and subject
+ - Recursively search the half of the tree that contains the test point (on the next dimension)
+ - If the BPQ is not full yet **or**
+ - if the distance between current point and subject along the current dimension is less than the largest distance in our BPQ
+ - then recursively search the other half as well (on the next dimension)
+
     module.exports = KDtree
