@@ -20,6 +20,14 @@ describe "Bounded Priority Queue", ->
       queue.insert({a:2}, 6)
       expect(queue.getMaxPriority()).to.equal 7
       expect(queue.getMinPriority()).to.equal 5
+      expect(queue.getSize()).to.equal 3
+
+    it "should work with size = 1", ->
+      queue = new BPQ 1
+      queue.insert({a:3}, 7)
+      queue.insert({a:1}, 5)
+      queue.insert({a:2}, 6)
+      expect(queue.getObjects()).to.deep.equal [{a:1}]
 
   describe "Logic", ->
     it "should not exceed size of the queue", ->

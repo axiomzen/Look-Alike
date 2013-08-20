@@ -9,6 +9,7 @@ A naive implementation for a (Min) Priority Queue with an upper-bound. Will main
 - getMaxPriority( ) - Returns the largest priority in queue.
 - getMinPriority( ) - Returns the smallest priority in queue.
 - getObjects( ) - Returns Array of all objects in queue -- length depends on size upon construction.
+- size( ) - Return the current size of the queue
 
 #### Code:
 
@@ -47,5 +48,10 @@ Class definition with some "private" variables
 
       getMinPriority: () ->
         @queue.top().priority
+
+**size**: Return the current size of the queue
+
+      getSize: () ->
+        @queue.size()
 
     module.exports = BPQ
