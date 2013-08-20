@@ -61,3 +61,25 @@ describe "KD-tree", ->
       expect(tree.getRoot().right.right.val).to.deep.equal {label: 'i', x:8, y:8, z:8}
       expect(tree.getRoot().right.left.left.val).to.deep.equal {label: 'e', x:9, y:0, z:1}
       expect(tree.getRoot().right.right.left.val).to.deep.equal {label: 'd', x:5, y:5, z:5}
+
+  describe "querying k-Nearest Neighbors", ->
+    describe 'with basic testCase', ->
+      testCase = require './test-cases/simple'
+      objects = testCase.objects
+      profile1 = testCase.subject1
+      profile2 = testCase.subject2
+      profile3 = testCase.subject3
+      options = k: 3
+      tree = new KDtree objects, (k for k,v of profile1) # so we neglect label as a dimension
+
+      console.log '       --- TEST CASE ---'
+      console.log testCase.chart
+
+      it "should return an instance of KD-tree", ->
+        expect(tree).to.be.instanceof KDtree
+        #console.log require('util').inspect tree.getRoot(), colors: true, depth: 5
+
+      it 'should return the nearest neighbor', ->
+        tree.query(profile1).label.should.eql('C')
+        tree.query(profile2).label.should.eql('E')
+        tree.query(profile3).label.should.eql('J')
