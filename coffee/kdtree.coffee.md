@@ -25,10 +25,20 @@ Looping over each attribute in a round-robin fashion, do the following:
 
       _helper = (objects, keys, depth) ->
         return null unless objects.length
+
+`depth` determines which attribute we are splitting by
+
         len = keys.length
         key = keys[depth % len]
+
+To find the node we split through, we sort the objects and find the median. However, it is possible that the nodes left to the median has the same value as the median, resulting in an inconsistent split -- so we need to find the index to split by, which would be the lowest index of the median value.
+
         objects.sort (a,b) -> a[key] - b[key]
-        median = Math.floor objects.length / 2
+        medianVal = objects[Math.floor objects.length / 2][key]
+        median = (v[key] for v in objects).indexOf medianVal
+
+Now store the current object in `val` of the splitting node, and recursively build up the left and right branches of the tree and increasing the depth.
+
         node =
           val: objects[median]
           left: _helper(objects.slice(0,median), keys, depth + 1)

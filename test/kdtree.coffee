@@ -38,3 +38,26 @@ describe "KD-tree", ->
       expect(tree.getRoot().left.right.val).to.deep.equal {x:4, y:7}
       expect(tree.getRoot().right.left.val).to.deep.equal {x:8, y:1}
       expect(tree.getRoot().right.right).to.equal null
+
+  describe "3D construction with labels", ->
+    tree = new KDtree [{x:1,y:2,z:3, label:'a'}, {x:5,y:2,z:7, label:'b'}, {x:3,y:3,z:4, label:'c'}, {x:5,y:5,z:5, label:'d'}, {x:9,y:0,z:1, label:'e'}, {x:10,y:1,z:3, label:'f'}, {x:5,y:3,z:7, label:'g'}, {x:3,y:9,z:9, label:'h'}, {x:8,y:8,z:8, label:'i'}], ["x", "y", "z"]
+    it "should return an instance of KD-tree", ->
+      expect(tree).to.be.instanceof KDtree
+      #console.log require('util').inspect tree.getRoot(), colors: true, depth: 5
+
+    it "should have the root at x = 5", ->
+      expect(tree.getRoot().val).to.deep.equal {label: 'b', x:5, y:2, z:7}
+
+    it "should have the correct first left child", ->
+      expect(tree.getRoot().left.val).to.deep.equal {label: 'c', x:3, y:3, z:4}
+
+    it "should have the correct right left child", ->
+      expect(tree.getRoot().right.val).to.deep.equal {label: 'g', x:5, y:3, z:7}
+
+    it "should have the complete correct tree", ->
+      expect(tree.getRoot().left.left.val).to.deep.equal {label: 'a', x:1, y:2, z:3}
+      expect(tree.getRoot().left.right.val).to.deep.equal {label: 'h', x:3, y:9, z:9}
+      expect(tree.getRoot().right.left.val).to.deep.equal {label: 'f', x:10, y:1, z:3}
+      expect(tree.getRoot().right.right.val).to.deep.equal {label: 'i', x:8, y:8, z:8}
+      expect(tree.getRoot().right.left.left.val).to.deep.equal {label: 'e', x:9, y:0, z:1}
+      expect(tree.getRoot().right.right.left.val).to.deep.equal {label: 'd', x:5, y:5, z:5}
