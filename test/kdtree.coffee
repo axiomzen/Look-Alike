@@ -93,9 +93,26 @@ describe "KD-tree", ->
         getLabels(tree.query(profile3, 3)).should.eql(['J', 'L', 'G'])
 
       it 'should return all objects sorted by distance', ->
-        getLabels(tree.query(profile1, 20)).should.eql
+        getLabels(tree.query(profile1, 20)).should.eql \
         ['C', 'H', 'A', 'E', 'K', 'F', 'D', 'I', 'G', 'B', 'L', 'J']
-        getLabels(tree.query(profile2, 20)).should.eql
+        getLabels(tree.query(profile2, 20)).should.eql \
         ['E', 'F', 'A', 'H', 'D', 'C', 'G', 'I', 'K', 'J', 'B', 'L']
-        getLabels(tree.query(profile3, 20)).should.eql
+        getLabels(tree.query(profile3, 20)).should.eql \
         ['J', 'L', 'G', 'I', 'F', 'D', 'E', 'B', 'H', 'K', 'A', 'C']
+
+    describe 'with 3D testCase', ->
+      tree = new KDtree [{x:1,y:2,z:3, label:'a'}, {x:5,y:2,z:7, label:'b'}, {x:3,y:3,z:4, label:'c'}, {x:5,y:5,z:5, label:'d'}, {x:9,y:0,z:1, label:'e'}, {x:10,y:1,z:3, label:'f'}, {x:5,y:3,z:7, label:'g'}, {x:3,y:9,z:9, label:'h'}, {x:8,y:8,z:8, label:'i'}], ["x", "y", "z"]
+      profile =
+        x: 3
+        y: 3
+        z: 3
+
+      it "should return the nearest neighbor", ->
+        tree.query(profile)[0].label.should.eql 'c'
+
+      it 'should return 3 nearest neighbors, sorted by distance', ->
+        getLabels(tree.query(profile, 3)).should.eql(['c', 'a', 'd'])
+
+      it 'should return all objects sorted by distance', ->
+        getLabels(tree.query(profile, 20)).should.eql \
+        ['c', 'a', 'd', 'g', 'b', 'e', 'f', 'h', 'i']
