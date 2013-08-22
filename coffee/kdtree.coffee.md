@@ -9,12 +9,18 @@ Sources [1](http://andrewd.ces.clemson.edu/courses/cpsc805/references/nearest_se
 
 The constructor of the KD-tree expects an array of objects which have the same attributes. Optionally as a second argument, you may provide an array of attribute keys you would like to index.
 
+    util = require './util'
+
     class KDtree
       getRoot: () ->
         @_tree
 
       constructor: (@objects, @keys) ->
         @keys ?= (k for k,v of @objects[0])
+
+We precalculate the Standard Deviations for each attribute, so we can perform standardized queries.
+
+        @stdv = util.allStdvs @keys, @objects
 
 Looping over each attribute in a round-robin fashion, do the following:
 
@@ -54,7 +60,7 @@ Now that we have our KD-tree fully built, we are ready to perform Nearest Neighb
   - Subject[Object] - The reference point that we want to find the Nearest Neighbors of -- must have all `@keys` defined.
   - k[Int] - The number of objects to return, defaults to 1. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
 
-      query: (subject, k = 1) ->
+      query: (subject, k = 1, normalize = true) ->
 
 Initialize a BPQ with size `k`.
 
@@ -69,9 +75,13 @@ Initialize a BPQ with size `k`.
           len = @keys.length
           key = @keys[depth % len]
 
- - Insert the current node into the queue, with priority being the distance between point and subject
+ - Insert the current node into the queue, with priority being the distance between point and subject. If normalize is true (default), then calculate distances with standard deviations.
 
-          dist = require('./util').distance subject, node.val
+          if normalize
+            dist = util.distance subject, node.val, stdv: @stdv
+          else
+            dist = util.distance subject, node.val
+
           Q.insert node.val, dist
 
  - Recursively search the half of the tree that contains the test point (on the next dimension)
@@ -82,9 +92,14 @@ Initialize a BPQ with size `k`.
           else
             _helper node.right, depth + 1
 
- - If the BPQ is not full yet **or** if the distance between current point and subject along the current dimension is less than the largest distance in our BPQ
+ - If the BPQ is not full yet **or** if the distance between current point and subject along the current dimension is less than the largest distance in our BPQ. Normalize if necessary.
 
-          if k > Q.getSize() or Math.abs(node.val[key] - subject[key]) < Q.getMaxPriority()
+          if normalize
+            attr_dist = Math.abs(node.val[key] - subject[key]) / @stdv[key]
+          else
+            attr_dist = Math.abs(node.val[key] - subject[key])
+
+          if k > Q.getSize() or attr_dist < Q.getMaxPriority()
 
  - then recursively search the other half as well (on the next dimension)
 

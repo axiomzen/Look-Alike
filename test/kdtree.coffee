@@ -74,13 +74,13 @@ describe "KD-tree", ->
         z: 3
 
       it "should return the nearest neighbor", ->
-        tree.query(profile)[0].label.should.eql 'c'
+        tree.query(profile,1,false)[0].label.should.eql 'c'
 
       it 'should return 3 nearest neighbors, sorted by distance', ->
-        getLabels(tree.query(profile, 3)).should.eql(['c', 'a', 'd'])
+        getLabels(tree.query(profile, 3,false)).should.eql(['c', 'a', 'd'])
 
       it 'should return all objects sorted by distance', ->
-        getLabels(tree.query(profile, 20)).should.eql \
+        getLabels(tree.query(profile, 20,false)).should.eql \
         ['c', 'a', 'd', 'g', 'b', 'e', 'f', 'h', 'i']
 
     describe 'with basic testCase', ->
@@ -101,21 +101,21 @@ describe "KD-tree", ->
 
       it 'should return the nearest neighbor', ->
         #console.log tree.query(profile1)
-        tree.query(profile1)[0].label.should.eql('C')
-        tree.query(profile2)[0].label.should.eql('E')
-        tree.query(profile3)[0].label.should.eql('J')
+        tree.query(profile1, 1, false)[0].label.should.eql('C')
+        tree.query(profile2, 1, false)[0].label.should.eql('E')
+        tree.query(profile3, 1, false)[0].label.should.eql('J')
 
       it 'should return 3 nearest neighbors, sorted by distance', ->
-        getLabels(tree.query(profile1, 3)).should.eql(['C', 'H', 'A'])
-        getLabels(tree.query(profile2, 3)).should.eql(['E', 'F', 'A'])
-        getLabels(tree.query(profile3, 3)).should.eql(['J', 'L', 'G'])
+        getLabels(tree.query(profile1, 3, false)).should.eql(['C', 'H', 'A'])
+        getLabels(tree.query(profile2, 3, false)).should.eql(['E', 'F', 'A'])
+        getLabels(tree.query(profile3, 3, false)).should.eql(['J', 'L', 'G'])
 
       it 'should return all objects sorted by distance', ->
-        getLabels(tree.query(profile1, 20)).should.eql \
+        getLabels(tree.query(profile1, 20, false)).should.eql \
         ['C', 'H', 'A', 'E', 'K', 'F', 'D', 'I', 'G', 'B', 'L', 'J']
-        getLabels(tree.query(profile2, 20)).should.eql \
+        getLabels(tree.query(profile2, 20, false)).should.eql \
         ['E', 'F', 'A', 'H', 'D', 'C', 'G', 'I', 'K', 'J', 'B', 'L']
-        getLabels(tree.query(profile3, 20)).should.eql \
+        getLabels(tree.query(profile3, 20, false)).should.eql \
         ['J', 'L', 'G', 'I', 'F', 'D', 'E', 'B', 'H', 'K', 'A', 'C']
 
     describe 'with testCase that requires normalization', ->
@@ -146,6 +146,6 @@ describe "KD-tree", ->
         getLabels(tree.query(profile1, 20)).should.eql \
         ['C', 'H', 'A', 'E', 'K', 'F', 'D', 'I', 'G', 'B', 'L', 'J']
         getLabels(tree.query(profile2, 20)).should.eql \
-        ['E', 'F', 'A', 'H', 'D', 'C', 'G', 'I', 'K', 'J', 'B', 'L']
+        ['E', 'F', 'A', 'H', 'G', 'D', 'C', 'I', 'K', 'J', 'B', 'L']
         getLabels(tree.query(profile3, 20)).should.eql \
         ['J', 'L', 'G', 'I', 'F', 'D', 'E', 'B', 'H', 'K', 'A', 'C']

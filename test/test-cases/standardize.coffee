@@ -54,11 +54,11 @@ objects = [
   ,
     label: 'G'
     attr_a: 4
-    attr_b: 20
+    attr_b: 19
   ,
     label: 'H'
     attr_a: 4
-    attr_b: -20
+    attr_b: -18
   ,
     label: 'I'
     attr_a: 6
@@ -66,7 +66,7 @@ objects = [
   ,
     label: 'J'
     attr_a: 6
-    attr_b: 30
+    attr_b: 31
   ,
     label: 'K'
     attr_a: 6
