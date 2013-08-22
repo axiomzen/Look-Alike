@@ -60,17 +60,6 @@ Given an array of attributes and an array of objects, return an object describin
         stdvs[attr] = exports.stdv(objects, attr)
       stdvs
 
-#### Standardize objects
-
-Takes an array of objects with numerical attributes, and returns object with standardized values,
-with units in measures of standard deviation from mean. (See www.econ.upf.edu/~michael/stanford/maeb4.pdf)
-
-    exports.standardize = (array) ->
-      m = mean array
-      s = exports.stdv array
-      ((x - m) / s for x in array)
-
-
 #### ---  meta-utils  ---
 
     mean = (array) ->

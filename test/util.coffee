@@ -34,13 +34,3 @@ describe 'Standardized Euclidean Distance function', ->
     utils.distance({ a: 1 }, { a: 5 }, { stdv: { a: 2 } }).should.eql(2)
   it 'should calculate correctly for 2 dimensions', ->
     utils.distance({ a: 1, b: 30 }, { a: 5, b: 50 }, { stdv: { a: 2, b: 10 } }).should.eql(Math.sqrt 8)
-
-describe.skip 'Standardize', ->
-  it 'returns the array in units of stdv from mean', ->
-    utils.standardize([a: 600, a: 470, a: 170, a: 430, a: 300])
-      .should.eql([
-        a: 1.398290251863176
-        a: 0.5158740735029193
-        a: -1.5204709534822884
-        a: 0.24436140323822492
-        a: -0.6380547751220317 ])
