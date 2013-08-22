@@ -2,9 +2,10 @@
   "name": "Look-Alike",
   "version": "0.0.0",
   "description": "Twin brother of Alike. They look quite alike. Except this brother is more heavy-weight and likes playing in trees.",
-  "main": "lib/main.js",
+  "main": "lib/kdtree.js",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script --reporter spec"
+    "test": "./node_modules/.bin/mocha --compilers coffee:coffee-script --reporter spec",
+    "prepublish": "./node_modules/.bin/coffee --compile --output lib coffee"
   },
   "repository": {
     "type": "git",
