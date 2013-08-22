@@ -58,14 +58,24 @@ With our `_helper` function defined, we can now trigger the tree to be build.
 Now that we have our KD-tree fully built, we are ready to perform Nearest Neighborhood queries. We will use a Bounded Priority Queue to store the best nodes found so far. The size of this queue is passed as the second parameter in the query call. The query call expects the following parameters:
 
   - Subject[Object] - The reference point that we want to find the Nearest Neighbors of -- must have all `@keys` defined.
-  - k[Int] - The number of objects to return, defaults to 1. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
+  - Options[Object] which may include:
+    - k[Int](default = 1) - The number of objects to return. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
+    - normalize[Bool](default = true) - When true, will normalize the attributes when calculating distances (recommended if attributes are not on the same scale).
 
-      query: (subject, k = 1, normalize = true) ->
+      query: (subject, options) ->
+
+Default options when not provided
+
+        if options
+          options.k = 1 unless options.k
+          options.normalize = true unless options.normalize
+        else
+          options = {k:1, normalize: true}
 
 Initialize a BPQ with size `k`.
 
         BPQ = require './bpq'
-        Q = new BPQ k
+        Q = new BPQ options.k
 
         _helper = (node, depth) =>
           return null unless node
@@ -77,7 +87,7 @@ Initialize a BPQ with size `k`.
 
  - Insert the current node into the queue, with priority being the distance between point and subject. If normalize is true (default), then calculate distances with standard deviations.
 
-          if normalize
+          if options.normalize
             dist = util.distance subject, node.val, stdv: @stdv
           else
             dist = util.distance subject, node.val
@@ -94,12 +104,12 @@ Initialize a BPQ with size `k`.
 
  - If the BPQ is not full yet **or** if the distance between current point and subject along the current dimension is less than the largest distance in our BPQ. Normalize if necessary.
 
-          if normalize
+          if options.normalize
             attr_dist = Math.abs(node.val[key] - subject[key]) / @stdv[key]
           else
             attr_dist = Math.abs(node.val[key] - subject[key])
 
-          if k > Q.getSize() or attr_dist < Q.getMaxPriority()
+          if options.k > Q.getSize() or attr_dist < Q.getMaxPriority()
 
  - then recursively search the other half as well (on the next dimension)
 
