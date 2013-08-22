@@ -1,4 +1,4 @@
-## Test case considering only two attriubutes, no normalization
+## Test case considering only two attriubutes, requires normalization
 
 ## Chart
 chart = "\u001b[31m
@@ -16,7 +16,7 @@ chart = "\u001b[31m
 ## Test Subjects
 subject1 =
   attr_a: 1
-  attr_b: -4
+  attr_b: -40
 
 subject2 =
   attr_a: 3
@@ -24,7 +24,7 @@ subject2 =
 
 subject3 =
   attr_a: 7
-  attr_b: 4
+  attr_b: 40
 
 ## Objects
 objects = [
@@ -34,15 +34,15 @@ objects = [
   ,
     label: 'B'
     attr_a: 1
-    attr_b: 4
+    attr_b: 40
   ,
     label: 'C'
     attr_a: 2
-    attr_b: -2
+    attr_b: -20
   ,
     label: 'D'
     attr_a: 2
-    attr_b: 2
+    attr_b: 20
   ,
     label: 'E'
     attr_a: 3
@@ -50,15 +50,15 @@ objects = [
   ,
     label: 'F'
     attr_a: 3
-    attr_b: 1
+    attr_b: 10
   ,
     label: 'G'
     attr_a: 4
-    attr_b: 1.9
+    attr_b: 19
   ,
     label: 'H'
     attr_a: 4
-    attr_b: -1.8
+    attr_b: -18
   ,
     label: 'I'
     attr_a: 6
@@ -66,15 +66,15 @@ objects = [
   ,
     label: 'J'
     attr_a: 6
-    attr_b: 3.1
+    attr_b: 31
   ,
     label: 'K'
     attr_a: 6
-    attr_b: -3
+    attr_b: -30
   ,
     label: 'L'
     attr_a: 7
-    attr_b: 2
+    attr_b: 20
 ]
 
 module.exports =

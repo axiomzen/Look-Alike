@@ -52,24 +52,13 @@ Given an array of objects, require key parameter identifying the attribute to ca
 
 #### Get all Standard Deviations
 
-Given a subject and an array of objects, return an object describing each of subject's key's stdv on objects
+Given an array of attributes and an array of objects, return an object describing the stdv per attribute.
 
-    exports.allStdvs = (subject, objects) ->
+    exports.allStdvs = (keys, objects) ->
       stdvs = {}
-      for attr of subject
+      for attr in keys
         stdvs[attr] = exports.stdv(objects, attr)
       stdvs
-
-#### Standardize objects
-
-Takes an array of objects with numerical attributes, and returns object with standardized values,
-with units in measures of standard deviation from mean. (See www.econ.upf.edu/~michael/stanford/maeb4.pdf)
-
-    exports.standardize = (array) ->
-      m = mean array
-      s = exports.stdv array
-      ((x - m) / s for x in array)
-
 
 #### ---  meta-utils  ---
 

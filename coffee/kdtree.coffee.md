@@ -9,12 +9,18 @@ Sources [1](http://andrewd.ces.clemson.edu/courses/cpsc805/references/nearest_se
 
 The constructor of the KD-tree expects an array of objects which have the same attributes. Optionally as a second argument, you may provide an array of attribute keys you would like to index.
 
+    util = require './util'
+
     class KDtree
       getRoot: () ->
         @_tree
 
       constructor: (@objects, @keys) ->
         @keys ?= (k for k,v of @objects[0])
+
+We precalculate the Standard Deviations for each attribute, so we can perform standardized queries.
+
+        @stdv = util.allStdvs @keys, @objects
 
 Looping over each attribute in a round-robin fashion, do the following:
 
@@ -52,14 +58,25 @@ With our `_helper` function defined, we can now trigger the tree to be build.
 Now that we have our KD-tree fully built, we are ready to perform Nearest Neighborhood queries. We will use a Bounded Priority Queue to store the best nodes found so far. The size of this queue is passed as the second parameter in the query call. The query call expects the following parameters:
 
   - Subject[Object] - The reference point that we want to find the Nearest Neighbors of -- must have all `@keys` defined.
-  - k[Int] - The number of objects to return, defaults to 1. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
+  - Options[Object] which may include:
+    - k[Int](default = 1) - The number of objects to return. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
+    - normalize[Bool](default = true) - When true, will normalize the attributes when calculating distances (recommended if attributes are not on the same scale).
+    - weights[Object](optional) - Define weights per attribute (e.g. `{x:0.3, y:0.7}` would weight attribute `y` at 70% and `x` at 30%. Defaults to equal weights)
 
-      query: (subject, k = 1) ->
+      query: (subject, options) ->
+
+Default options when not provided
+
+        if options
+          options.k = 1 unless options.k
+          options.normalize = true unless options.normalize
+        else
+          options = {k:1, normalize: true}
 
 Initialize a BPQ with size `k`.
 
         BPQ = require './bpq'
-        Q = new BPQ k
+        Q = new BPQ options.k
 
         _helper = (node, depth) =>
           return null unless node
@@ -69,9 +86,13 @@ Initialize a BPQ with size `k`.
           len = @keys.length
           key = @keys[depth % len]
 
- - Insert the current node into the queue, with priority being the distance between point and subject
+ - Insert the current node into the queue, with priority being the distance between point and subject. If normalize is true (default), then calculate distances with standard deviations. When weights are given, they will be applied in `util.distance`. If `weights` is undefined, it will be ignored.
 
-          dist = require('./util').distance subject, node.val
+          if options.normalize
+            dist = util.distance subject, node.val, stdv: @stdv, weights: options.weights
+          else
+            dist = util.distance subject, node.val, weights: options.weights
+
           Q.insert node.val, dist
 
  - Recursively search the half of the tree that contains the test point (on the next dimension)
@@ -82,9 +103,19 @@ Initialize a BPQ with size `k`.
           else
             _helper node.right, depth + 1
 
- - If the BPQ is not full yet **or** if the distance between current point and subject along the current dimension is less than the largest distance in our BPQ
+ - Calculate the distance between the current node and the subject along the current dimension. Normalize and apply weights if necessary.
 
-          if k > Q.getSize() or Math.abs(node.val[key] - subject[key]) < Q.getMaxPriority()
+          if options.normalize
+            attr_dist = Math.abs(node.val[key] - subject[key]) / @stdv[key]
+          else
+            attr_dist = Math.abs(node.val[key] - subject[key])
+
+          if options.weights
+            attr_dist *= options.weights[key]
+
+ - If the BPQ is not full yet **or** if the distance between current point and subject along the current dimension is less than the largest distance in our BPQ.
+
+          if options.k > Q.getSize() or attr_dist < Q.getMaxPriority()
 
  - then recursively search the other half as well (on the next dimension)
 
