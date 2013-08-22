@@ -149,3 +149,10 @@ describe "KD-tree", ->
         ['E', 'F', 'A', 'H', 'G', 'D', 'C', 'I', 'K', 'J', 'B', 'L']
         getLabels(tree.query(profile3, k: 20)).should.eql \
         ['J', 'L', 'G', 'I', 'F', 'D', 'E', 'B', 'H', 'K', 'A', 'C']
+
+      describe 'and weights per attribute', ->
+        it 'should minimize category with 0.01 weight', ->
+          options = k:3, standardize: true, weights: { attr_a: 0.01, attr_b: 0.99 }
+          getLabels(tree.query(profile1, options)).should.eql(['K', 'C', 'H'])
+          getLabels(tree.query(profile2, options)).should.eql(['E', 'A', 'I'])
+          getLabels(tree.query(profile3, options)).should.eql(['B', 'J', 'L'])

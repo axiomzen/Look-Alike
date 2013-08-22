@@ -61,6 +61,7 @@ Now that we have our KD-tree fully built, we are ready to perform Nearest Neighb
   - Options[Object] which may include:
     - k[Int](default = 1) - The number of objects to return. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
     - normalize[Bool](default = true) - When true, will normalize the attributes when calculating distances (recommended if attributes are not on the same scale).
+    - weights[Object](optional) - Define weights per attribute (e.g. `{x:0.3, y:0.7}` would weight attribute `y` at 70% and `x` at 30%. Defaults to equal weights)
 
       query: (subject, options) ->
 
@@ -85,12 +86,12 @@ Initialize a BPQ with size `k`.
           len = @keys.length
           key = @keys[depth % len]
 
- - Insert the current node into the queue, with priority being the distance between point and subject. If normalize is true (default), then calculate distances with standard deviations.
+ - Insert the current node into the queue, with priority being the distance between point and subject. If normalize is true (default), then calculate distances with standard deviations. When weights are given, they will be applied in `util.distance`. If `weights` is undefined, it will be ignored.
 
           if options.normalize
-            dist = util.distance subject, node.val, stdv: @stdv
+            dist = util.distance subject, node.val, stdv: @stdv, weights: options.weights
           else
-            dist = util.distance subject, node.val
+            dist = util.distance subject, node.val, weights: options.weights
 
           Q.insert node.val, dist
 
@@ -102,12 +103,17 @@ Initialize a BPQ with size `k`.
           else
             _helper node.right, depth + 1
 
- - If the BPQ is not full yet **or** if the distance between current point and subject along the current dimension is less than the largest distance in our BPQ. Normalize if necessary.
+ - Calculate the distance between the current node and the subject along the current dimension. Normalize and apply weights if necessary.
 
           if options.normalize
             attr_dist = Math.abs(node.val[key] - subject[key]) / @stdv[key]
           else
             attr_dist = Math.abs(node.val[key] - subject[key])
+
+          if options.weights
+            attr_dist *= options.weights[key]
+
+ - If the BPQ is not full yet **or** if the distance between current point and subject along the current dimension is less than the largest distance in our BPQ.
 
           if options.k > Q.getSize() or attr_dist < Q.getMaxPriority()
 
