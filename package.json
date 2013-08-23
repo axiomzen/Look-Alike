@@ -1,7 +1,7 @@
 {
   "name": "Look-Alike",
   "version": "0.0.0",
-  "description": "Twin brother of Alike. They look quite alike. Except this brother is more heavy-weight and likes playing in trees.",
+  "description": "A simple-yet-powerful KD-tree library for NodeJS, with support for lightning-fast k-Nearest Neighbour queries. Supports normalization, weights, key and filter parameters",
   "main": "lib/kdtree.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers coffee:coffee-script --reporter spec",
@@ -32,5 +32,7 @@
   },
   "dependencies": {
     "heap": "~0.2.1"
-  }
+  },
+  "homepage": "https://github.com/axiomzen/Look-Alike",
+  "bugs": "https://github.com/axiomzen/Look-Alike/issues"
 }
