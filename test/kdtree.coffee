@@ -1,4 +1,3 @@
-require 'mocha'
 expect = require('chai').expect
 should = require('chai').should()
 KDtree = require '../coffee/kdtree'

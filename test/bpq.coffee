@@ -1,4 +1,3 @@
-require 'mocha'
 expect = require('chai').expect
 BPQ = require '../coffee/bpq'
 
