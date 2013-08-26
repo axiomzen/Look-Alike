@@ -16,7 +16,33 @@ The constructor of the KD-tree expects an array of objects which have the same a
         @_tree
 
       constructor: (@objects, @keys) ->
+
+Parameter checking:
+
+        throw new Error('Need at least 1 argument') unless arguments.length > 0
+
+        if Array.isArray @objects
+          if @objects.some((x) -> x and x.toString() isnt '[object Object]')
+            throw new Error('Expecting an array of objects as first argument')
+        else
+          throw new Error('Expecting an array of objects as first argument')
+
+Default `@keys` to first the keys of the first object. If `@keys` is passed as a parameter, make sure it is an array of strings.
+
         @keys ?= (k for k,v of @objects[0])
+
+        if Array.isArray(@keys)
+          if @keys.some((x) -> typeof x isnt 'string')
+            throw new Error('Expecting an array of strings as second argument')
+        else
+          throw new Error 'Expecting an array of strings as second argument'
+
+Make sure that all objects have the `@keys`
+
+        unless @objects.every((x) =>
+          @keys.every((k) ->
+            x.hasOwnProperty k))
+          throw new Error "Expecting all objects to have at least the same keys as first object or second parameter"
 
 We precalculate the Standard Deviations for each attribute, so we can perform standardized queries.
 

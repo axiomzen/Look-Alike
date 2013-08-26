@@ -1,5 +1,6 @@
 require 'mocha'
 expect = require('chai').expect
+should = require('chai').should()
 KDtree = require '../coffee/kdtree'
 
 describe "KD-tree", ->
@@ -61,6 +62,34 @@ describe "KD-tree", ->
       expect(tree.getRoot().right.right.val).to.deep.equal {label: 'i', x:8, y:8, z:8}
       expect(tree.getRoot().right.left.left.val).to.deep.equal {label: 'e', x:9, y:0, z:1}
       expect(tree.getRoot().right.right.left.val).to.deep.equal {label: 'd', x:5, y:5, z:5}
+
+  describe "arguments", ->
+    it "should have at least 1 argument", ->
+      (-> new KDtree ).should.throw 'Need at least 1 argument'
+
+    it "for the constructor should expect array of objects as first argument", ->
+      (-> new KDtree {a:1, b:2, c:3}).should.throw "Expecting an array of objects as first argument"
+      (-> new KDtree "bla").should.throw "Expecting an array of objects as first argument"
+      (-> new KDtree null).should.throw "Expecting an array of objects as first argument"
+      (-> new KDtree undefined).should.throw "Expecting an array of objects as first argument"
+      (-> new KDtree [2,3,4]).should.throw "Expecting an array of objects as first argument"
+      (-> new KDtree [{a:2},{b:3},4]).should.throw "Expecting an array of objects as first argument"
+      (-> new KDtree [[2],[3],[4]]).should.throw "Expecting an array of objects as first argument"
+      (-> new KDtree [null,undefined,[4]]).should.throw "Expecting an array of objects as first argument"
+
+    it "should expect the second argument to be an array of strings", ->
+      (-> new KDtree [{a:1}], "bla").should.throw "Expecting an array of strings as second argument"
+      (-> new KDtree [{a:1}], {a: 2}).should.throw "Expecting an array of strings as second argument"
+      (-> new KDtree [{a:1}], 2).should.throw "Expecting an array of strings as second argument"
+      (-> new KDtree [{a:1}], [2]).should.throw "Expecting an array of strings as second argument"
+      (-> new KDtree [{a:1}], [null]).should.throw "Expecting an array of strings as second argument"
+      (-> new KDtree [{a:1}], [{a:2}]).should.throw "Expecting an array of strings as second argument"
+
+    it "should expect all objects to have (at least) the same keys as the first object", ->
+      (-> new KDtree [{a:1},{a:2},{b:3}]).should.throw "Expecting all objects to have at least the same keys as first object or second parameter"
+
+    it "should expect all objects to have (at least) the keys that are specified in second argument", ->
+      (-> new KDtree [{a:1, b:2},{a:2, b:5},{b:3}], ['a']).should.throw "Expecting all objects to have at least the same keys as first object or second parameter"
 
   describe "querying k-Nearest Neighbors", ->
     getLabels = (results) ->
