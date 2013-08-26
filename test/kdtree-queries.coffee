@@ -2,6 +2,20 @@ expect = require('chai').expect
 should = require('chai').should()
 KDtree = require '../coffee/kdtree'
 
+describe 'KD-tree simple queries', ->
+  it 'should return an empty object/array if no objects', ->
+    tree = new KDtree []
+    expect(tree.query({a:1})).to.eql([])
+  it 'should return nearest neighbor with single dimension', ->
+    tree = new KDtree [{a:1}, {a:2}]
+    expect(tree.query(a:1)).to.eql([{a:1}])
+  it 'should return 2 nearest neighbors (in order) with single dimension', ->
+    tree = new KDtree [{a:1}, {a:3}, {a:0}]
+    expect(tree.query(a:1, {k:2})).to.eql([{a:1}, {a:0}])
+  it 'should expect the keys in subject to be present in all objects', ->
+    tree = new KDtree [{a:1}, {a:3}, {a:0}]
+    expect(-> (tree.query b:1)).to.throw 'Subject does not have all keys'
+
 describe "querying k-Nearest Neighbors on a KDtree", ->
   getLabels = (results) ->
     (r.label for r in results)

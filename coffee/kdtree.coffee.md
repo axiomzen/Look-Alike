@@ -91,6 +91,10 @@ Now that we have our KD-tree fully built, we are ready to perform Nearest Neighb
 
       query: (subject, options) ->
 
+Make sure the subject has all parameters of `@keys`
+
+        throw new Error "Subject does not have all keys" unless @keys.every (k) -> subject.hasOwnProperty k
+
 Default options when not provided
 
         if options
@@ -157,6 +161,6 @@ Initialize a BPQ with size `k`.
 Start at the root:
 
         root = @getRoot()
-        _helper root, 0
+        if root is null then return [] else _helper root, 0
 
     module.exports = KDtree
