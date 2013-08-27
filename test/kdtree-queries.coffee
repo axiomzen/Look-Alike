@@ -16,6 +16,14 @@ describe 'KD-tree simple queries', ->
     tree = new KDtree [{a:1}, {a:3}, {a:0}]
     expect(-> (tree.query b:1)).to.throw 'Subject does not have all keys'
 
+  it 'should accept a key parameter for objects', ->
+    key = (o) -> o.x
+    tree = new KDtree [{x: {a:1}}, {x: {a:2}}, {x: {a:3}}], ['a'], {key: key}
+    expect(tree.query(a:1, {k: 1, normalize: false})).to.eql([{x: {a:1}}])
+  it 'should accept a key parameter for nested objects', ->
+    tree = new KDtree [{x: {y: {a:1}}}, {x: {y: {a:2}}}], ['a'], {key: (o) -> o.x.y}
+    expect(tree.query(a:1, {k: 1, normalize: false})).to.eql([{x: {y: {a:1}}}])
+
 describe "querying k-Nearest Neighbors on a KDtree", ->
   getLabels = (results) ->
     (r.label for r in results)
