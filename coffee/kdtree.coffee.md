@@ -136,7 +136,8 @@ Initialize a BPQ with size `k`.
 
  - If we have a filter, we would only insert the node into the queue if it passes the filter (i.e. returns true)
 
-          if not options?.filter or (options?.filter and options.filter node.val)
+          options = options || {}
+          if (not options.filter) or options.filter node.val
             Q.insert node.val, dist
 
  - Recursively search the half of the tree that contains the test point (on the next dimension)
