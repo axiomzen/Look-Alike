@@ -96,7 +96,8 @@ Now that we have our KD-tree fully built, we are ready to perform Nearest Neighb
   - Options[Object] which may include:
     - k[Int](default = 1) - The number of objects to return. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
     - normalize[Bool](default = true) - When true, will normalize the attributes when calculating distances (recommended if attributes are not on the same scale).
-    - weights[Object](optional) - Define weights per attribute (e.g. `{x:0.3, y:0.7}` would weight attribute `y` at 70% and `x` at 30%. Defaults to equal weights)
+    - weights[Object] (optional) - Define weights per attribute (e.g. `{x:0.3, y:0.7}` would weight attribute `y` at 70% and `x` at 30%. Defaults to equal weights)
+    - filter[Function] (optional) - When provided, only consider objects in the tree that pass the filter function (i.e. return true)
 
       query: (subject, options) ->
 
@@ -133,7 +134,10 @@ Initialize a BPQ with size `k`.
           else
             dist = util.distance subject, objectValues, weights: options.weights
 
-          Q.insert node.val, dist
+ - If we have a filter, we would only insert the node into the queue if it passes the filter (i.e. returns true)
+
+          if not options?.filter or (options?.filter and options.filter node.val)
+            Q.insert node.val, dist
 
  - Recursively search the half of the tree that contains the test point (on the next dimension)
 

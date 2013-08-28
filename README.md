@@ -45,6 +45,7 @@ The instance method is called `query` and expects the following parameters:
     - `k[Int] (default = 1)` - The number of objects to return. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
     - `normalize[Bool] (default = true)` - When true, will normalize the attributes when calculating distances (recommended if attributes are not on the same scale).
     - `weights[Object] (optional)` - Define weights per attribute (e.g. `{x:0.3, y:0.7}` would weight attribute `y` at 70% and `x` at 30%. Defaults to equal weights)
+    - filter[Function] (optional) - When provided, only consider objects in the tree that pass the filter function (i.e. return true)
 
 And returns an array of objects in sorted order. You may look at the test-cases if you don't believe me.
 

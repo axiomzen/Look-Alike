@@ -23,6 +23,12 @@ describe 'KD-tree simple queries', ->
   it 'should accept a key parameter for nested objects', ->
     tree = new KDtree [{x: {y: {a:1}}}, {x: {y: {a:2}}}], ['a'], {key: (o) -> o.x.y}
     expect(tree.query(a:1, {k: 1, normalize: false})).to.eql([{x: {y: {a:1}}}])
+  it 'should accept filter parameter', ->
+    tree = new KDtree [{a:1}, {a:3}, {a:0}], ['a']
+    expect(tree.query(a:1, {k: 2, normalize: false, filter: (o) -> o.a > 0})).to.eql([{a:1}, {a:3}])
+  it 'should accept return empty array if filters all', ->
+    tree = new KDtree [{a:1}, {a:3}, {a:0}], ['a']
+    expect(tree.query(a:1, {k: 2, normalize: false, filter: (o) -> o.a > 10})).to.eql([])
 
 describe "querying k-Nearest Neighbors on a KDtree", ->
   getLabels = (results) ->
