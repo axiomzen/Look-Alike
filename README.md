@@ -4,7 +4,7 @@ Look-Alike
 
 Twin brother of [Alike](https://github.com/axiomzen/Alike). They look quite alike. Except this brother is more heavy-weight and likes playing in trees.
 
-A simple-yet-powerful KD-tree library for NodeJS, with support for lightning-fast k-Nearest Neighbour queries.
+A simple-yet-powerful KD-tree library for NodeJS, with support for lightning-fast k-Nearest Neighbour queries. Supports normalization, weights, key and filter parameters.
 
 ## Look-Alike vs Alike
 
@@ -49,7 +49,7 @@ The instance method is called `query` and expects the following parameters:
   - `subject[Object]` - The reference point that we want to find the Nearest Neighbors of
   - `options[Object] (optional)` - which may include:
     - `k[Int] (default = 1)` - The number of objects to return. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
-    - `normalize[Bool] (default = true)` - When true, will normalize the attributes when calculating distances (recommended if attributes are not on the same scale).
+    - `normalize[Bool] (default = true)` - When true, will normalize the attributes when calculating distances (recommended if attributes are not on the same scale). Note: turn off for small number of rows to avoid unexpected results! In those cases you should be using [Alike](https://github.com/axiomzen/Alike) anyway!
     - `weights[Object] (optional)` - Define weights per attribute (e.g. `{x:0.3, y:0.7}` would weight attribute `y` at 70% and `x` at 30%. Defaults to equal weights)
     - filter[Function] (optional) - When provided, only consider objects in the tree that pass the filter function (i.e. return true)
 

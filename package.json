@@ -1,5 +1,5 @@
 {
-  "name": "Look-Alike",
+  "name": "look-alike",
   "version": "0.1.0",
   "description": "A simple-yet-powerful KD-tree library for NodeJS, with support for lightning-fast k-Nearest Neighbour queries. Supports normalization, weights, key and filter parameters",
   "main": "lib/kdtree.js",
