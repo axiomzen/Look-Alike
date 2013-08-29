@@ -10,9 +10,9 @@ A simple-yet-powerful KD-tree library for NodeJS, with support for lightning-fas
 
 But if Look-Alike is more powerful than Alike, why use Alike at all? Well, [TANSTAAFL](http://en.wikipedia.org/wiki/There_ain't_no_such_thing_as_a_free_lunch)
 
-Alike is more nimble and functional and does not require state. You can call it with thousands of rows and it will still be fast (`n log n`). It is also better when the rows change often.
+Alike is more nimble and functional and does not require state. You can call it with thousands of rows and it will still be fast (`n log n`). It is also better when the rows change often (no need to rebuild the tree).
 
-Look-Alike builds the tree in advance (which is the only way to beat `n log n`) and holds it in memory. It supports kNN queries that can be as fast as `k log n`, so is the prefered brother when you have more than a few thousand rows. The tree does not change -- it would need to be rebuild (at `n log2 n`) before the query.
+Look-Alike builds the tree in advance (which is the only way to beat `n log n`) and holds it in memory. It supports kNN queries that can be as fast as `k log n`, so is the prefered brother when you have more than a few thousand rows. The tree does not change -- it would need to be rebuild (at `n log2 n`) before the query when the rows change.
 
 ## Quickstart
 
@@ -24,24 +24,30 @@ $ npm install look-alike --save
 
 Now you can load up the module and use it like so:
 
-```
+```javascript
 LA = require('look-alike');
-tree = new LA([rows])
-top3 = tree.query(subject, {k:3})
+tree = new LA([rows]);
+top3 = tree.query(subject, {k:3});
 ```
 
-Given `[rows]` is an array of gazillion objects with `x` numerical attributes (on different scales, if you will), `top3` now holds an array of the 3 closest objects to `subject`. The second-easiest Recommender System you will ever see (aside from [Alike](https://github.com/axiomzen/Alike)).
+Given `[rows]` is an array of gazillion objects with `x` numerical attributes, `top3` now holds an array of the 3 closest objects to `subject`. The second-easiest Recommender System you will ever see (aside from [Alike](https://github.com/axiomzen/Alike)).
 
 ## Overview
 
 Look-Alike exports a single class with a constructor and a single instance method.
 
-The constructor expects an array of objects, and optionally an array of strings that described which keys/dimensions to use in the KD-tree. If the latter is not provided, it will default to using all keys. Specifying which keys to use for the tree is useful if you want to include additional information in the objects (such as an id, or a label, or more)
+The constructor expects an array of objects, and optionally an object of options:
+
+  - `objects[Array]` - The rows from which we build our tree
+  - `options[Object] (optional)` - which may include:
+    - `attributes[Array] (optional)` - An array of strings which list attributes/dimensions to use in the KD-tree. By default, will use all keys of the first object in `objects`. Specifying which keys to use for the tree is useful if you want to include additional information in the objects (such as an id, or a label, or more).
+    - `key[Function] (optional)` - A `key` function, which is used to map over `objects` to get to the `attributes`. Useful when the attributes are nested in the parent object.
+
 
 The instance method is called `query` and expects the following parameters:
 
-  - `Subject[Object]` - The reference point that we want to find the Nearest Neighbors of
-  - `Options[Object] (optional)` - which may include:
+  - `subject[Object]` - The reference point that we want to find the Nearest Neighbors of
+  - `options[Object] (optional)` - which may include:
     - `k[Int] (default = 1)` - The number of objects to return. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
     - `normalize[Bool] (default = true)` - When true, will normalize the attributes when calculating distances (recommended if attributes are not on the same scale).
     - `weights[Object] (optional)` - Define weights per attribute (e.g. `{x:0.3, y:0.7}` would weight attribute `y` at 70% and `x` at 30%. Defaults to equal weights)

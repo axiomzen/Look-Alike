@@ -18,16 +18,16 @@ describe 'KD-tree simple queries', ->
 
   it 'should accept a key parameter for objects', ->
     key = (o) -> o.x
-    tree = new KDtree [{x: {a:1}}, {x: {a:2}}, {x: {a:3}}], ['a'], {key: key}
+    tree = new KDtree [{x: {a:1}}, {x: {a:2}}, {x: {a:3}}], {attributes: ['a'], key: key}
     expect(tree.query(a:1, {k: 1, normalize: false})).to.eql([{x: {a:1}}])
   it 'should accept a key parameter for nested objects', ->
-    tree = new KDtree [{x: {y: {a:1}}}, {x: {y: {a:2}}}], ['a'], {key: (o) -> o.x.y}
+    tree = new KDtree [{x: {y: {a:1}}}, {x: {y: {a:2}}}], {attributes: ['a'], key: (o) -> o.x.y}
     expect(tree.query(a:1, {k: 1, normalize: false})).to.eql([{x: {y: {a:1}}}])
   it 'should accept filter parameter', ->
-    tree = new KDtree [{a:1}, {a:3}, {a:0}], ['a']
+    tree = new KDtree [{a:1}, {a:3}, {a:0}], attributes: ['a']
     expect(tree.query(a:1, {k: 2, normalize: false, filter: (o) -> o.a > 0})).to.eql([{a:1}, {a:3}])
   it 'should accept return empty array if filters all', ->
-    tree = new KDtree [{a:1}, {a:3}, {a:0}], ['a']
+    tree = new KDtree [{a:1}, {a:3}, {a:0}], attributes: ['a']
     expect(tree.query(a:1, {k: 2, normalize: false, filter: (o) -> o.a > 10})).to.eql([])
 
 describe "querying k-Nearest Neighbors on a KDtree", ->
@@ -35,7 +35,7 @@ describe "querying k-Nearest Neighbors on a KDtree", ->
     (r.label for r in results)
 
   describe 'with 3D testCase', ->
-    tree = new KDtree [{x:1,y:2,z:3, label:'a'}, {x:5,y:2,z:7, label:'b'}, {x:3,y:3,z:4, label:'c'}, {x:5,y:5,z:5, label:'d'}, {x:9,y:0,z:1, label:'e'}, {x:10,y:1,z:3, label:'f'}, {x:5,y:3,z:7, label:'g'}, {x:3,y:9,z:9, label:'h'}, {x:8,y:8,z:8, label:'i'}], ["x", "y", "z"]
+    tree = new KDtree [{x:1,y:2,z:3, label:'a'}, {x:5,y:2,z:7, label:'b'}, {x:3,y:3,z:4, label:'c'}, {x:5,y:5,z:5, label:'d'}, {x:9,y:0,z:1, label:'e'}, {x:10,y:1,z:3, label:'f'}, {x:5,y:3,z:7, label:'g'}, {x:3,y:9,z:9, label:'h'}, {x:8,y:8,z:8, label:'i'}], attributes: ["x", "y", "z"]
     profile =
       x: 3
       y: 3
@@ -58,7 +58,7 @@ describe "querying k-Nearest Neighbors on a KDtree", ->
     profile2 = testCase.subject2
     profile3 = testCase.subject3
     options = k: 3
-    tree = new KDtree objects, (k for k,v of profile1) # so we neglect label as a dimension
+    tree = new KDtree objects, attributes: (k for k,v of profile1) # so we neglect label as a dimension
 
     console.log '       --- TEST CASE ---'
     console.log testCase.chart
@@ -93,7 +93,7 @@ describe "querying k-Nearest Neighbors on a KDtree", ->
     profile2 = testCase.subject2
     profile3 = testCase.subject3
     options = k: 3
-    tree = new KDtree objects, (k for k,v of profile1) # so we neglect label as a dimension
+    tree = new KDtree objects, attributes: (k for k,v of profile1) # so we neglect label as a dimension
 
     it "should return an instance of KD-tree", ->
       expect(tree).to.be.instanceof KDtree
