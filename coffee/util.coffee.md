@@ -60,6 +60,14 @@ Given an array of attributes and an array of objects, return an object describin
         stdvs[attr] = exports.stdv(objects, attr)
       stdvs
 
+#### Get index of the median
+
+Given an array of numbers, return the lowest index of the median value.
+
+    exports.medianIndex = (array) ->
+      medianVal = array[Math.floor array.length / 2]
+      median = array.indexOf medianVal
+
 #### ---  meta-utils  ---
 
     mean = (array) ->

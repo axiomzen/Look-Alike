@@ -34,3 +34,9 @@ describe 'Standardized Euclidean Distance function', ->
     utils.distance({ a: 1 }, { a: 5 }, { stdv: { a: 2 } }).should.eql(2)
   it 'should calculate correctly for 2 dimensions', ->
     utils.distance({ a: 1, b: 30 }, { a: 5, b: 50 }, { stdv: { a: 2, b: 10 } }).should.eql(Math.sqrt 8)
+
+describe 'Get median index', ->
+  it 'should find the median in a simple array', ->
+    utils.medianIndex([1,2,3,4,5]).should.eql 2
+  it 'should find the index of the first occurence of the median value', ->
+    utils.medianIndex([1,2,3,3,3,3,3,3,4,5]).should.eql 2

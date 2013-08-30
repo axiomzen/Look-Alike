@@ -75,8 +75,7 @@ To find the node we split through, we sort the objects and find the median. Howe
             else
               a[attr] - b[attr]
 
-          medianVal = objects[Math.floor objects.length / 2][attr]
-          median = (v[attr] for v in objects).indexOf medianVal
+          median = util.medianIndex (o[attr] for o in objects)
 
 Now store the current object in `val` of the splitting node, and recursively build up the left and right branches of the tree and increasing the depth.
 
