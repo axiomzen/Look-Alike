@@ -89,3 +89,27 @@ describe "KD-tree", ->
 
     it "should expect all objects to have (at least) the keys that are specified in second argument", ->
       (-> new KDtree [{a:1, b:2},{a:2, b:5},{b:3}], attributes: ['a']).should.throw "Expecting all objects to have at least the same keys as first object or second parameter"
+
+  describe "stack overflow", ->
+    testCase = require './test-cases/simple'
+    objects = testCase.objects
+    # Since we have 12 objects, doubling it up 12 times gives up ~50k rows
+    for i in [1..12]
+      objects = objects.concat objects
+
+    it "should be able to handle ~50k rows without throwing SO", ->
+      console.log "Building tree with #{objects.length} number of rows"
+      tree = new KDtree objects
+      expect(tree).to.be.instanceof KDtree
+
+    it "should be able to handle ~100k rows without throwing SO", ->
+      objects = objects.concat objects
+      console.log "Building tree with #{objects.length} number of rows"
+      tree = new KDtree objects
+      expect(tree).to.be.instanceof KDtree
+
+    it "should be able to handle ~200k rows without throwing SO", ->
+      objects = objects.concat objects
+      console.log "Building tree with #{objects.length} number of rows"
+      tree = new KDtree objects
+      expect(tree).to.be.instanceof KDtree
