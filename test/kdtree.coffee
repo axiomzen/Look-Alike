@@ -99,7 +99,7 @@ describe "KD-tree", ->
 
     it "should be able to handle ~50k rows without throwing SO", ->
       console.log "Building tree with #{objects.length} number of rows"
-      tree = new KDtree objects
+      tree = new KDtree objects, {attributes: ["attr_a", "attr_b"]}
       expect(tree).to.be.instanceof KDtree
 
     it "should be able to handle ~100k rows without throwing SO", ->
