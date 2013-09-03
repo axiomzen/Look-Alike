@@ -94,10 +94,10 @@ Now that we have our KD-tree fully built, we are ready to perform Nearest Neighb
 
   - Subject[Object] - The reference point that we want to find the Nearest Neighbors of -- must have all `@options.attributes` defined.
   - Options[Object] which may include:
-    - k[Int](default = 1) - The number of objects to return. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
-    - normalize[Bool](default = true) - When true, will normalize the attributes when calculating distances (recommended if attributes are not on the same scale).
-    - weights[Object] (optional) - Define weights per attribute (e.g. `{x:0.3, y:0.7}` would weight attribute `y` at 70% and `x` at 30%. Defaults to equal weights)
-    - filter[Function] (optional) - When provided, only consider objects in the tree that pass the filter function (i.e. return true)
+    - `k[Int] (default = 1)` - The number of objects to return. The query complexity is `k log n`, so the higher this number, the longer the algorithm takes (on average).
+    - `normalize[Bool] (default = true)` - When true, will normalize the attributes when calculating distances (recommended if attributes are not on the same scale).
+    - `weights[Object] (optional)` - Define weights per attribute (e.g. `{x:0.3, y:0.7}` would weight attribute `y` at 70% and `x` at 30%. Defaults to equal weights)
+    - `filter[Function] (optional)` - When provided, only consider objects in the tree that pass the filter function (i.e. return true)
 
       query: (subject, options) ->
 
