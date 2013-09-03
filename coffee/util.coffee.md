@@ -66,7 +66,7 @@ Given an array of numbers, return the lowest index of the median value.
 
     exports.medianIndex = (array) ->
       medianVal = array[Math.floor array.length / 2]
-      median = array.indexOf medianVal
+      array.indexOf medianVal
 
 #### ---  meta-utils  ---
 
