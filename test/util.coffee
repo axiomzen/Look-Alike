@@ -35,8 +35,33 @@ describe 'Standardized Euclidean Distance function', ->
   it 'should calculate correctly for 2 dimensions', ->
     utils.distance({ a: 1, b: 30 }, { a: 5, b: 50 }, { stdv: { a: 2, b: 10 } }).should.eql(Math.sqrt 8)
 
-describe 'Get median index', ->
-  it 'should find the median in a simple array', ->
-    utils.medianIndex([1,2,3,4,5]).should.eql 2
-  it 'should find the index of the first occurence of the median value', ->
-    utils.medianIndex([1,2,3,3,3,3,3,3,4,5]).should.eql 2
+describe 'Get median indices', ->
+  it 'should find the median bounds in a simple array', ->
+    utils.medianIndex([1,2,3,4,5]).should.eql {lower:2, upper:3, median: 2}
+  it 'should find the median bounds in a longer array', ->
+    utils.medianIndex([1,2,3,3,3,3,3,3,4,5]).should.eql {lower:2, upper:8, median: 5}
+
+describe 'Get array of identical objects, given sorted array and median bounds', ->
+  objects = [{a:1, b:2},{a:2, b:3}, {a:2, b:5},{a:2, b:3}, {a:2, b:3}, {a:2, b:5},{a:2, b:3}, {a:5, b:3}, {a:8, b:8}]
+  attributes = ["a", "b"]
+  bounds =
+    median: 3
+    lower: 1
+    upper: 5
+  current_attr = "a"
+  ans = {}
+  it 'should return array of identical objects', ->
+    ans = utils.getSplit objects, bounds, attributes, current_attr
+    ans.identicals.should.be.an.array
+    ans.identicals.should.have.length 4
+    ans.identicals[0].should.deep.equal a:2, b:3
+    ans.identicals[1].should.deep.equal a:2, b:3
+    ans.identicals[2].should.deep.equal a:2, b:3
+  it 'should return two halves of objects on either side of the median', ->
+    ans.left.should.have.length 1
+    ans.left[0].should.deep.equal a:1, b:2
+    ans.right.should.have.length 4
+    ans.right[0].should.deep.equal a:2, b:5
+    ans.right[1].should.deep.equal a:2, b:5
+    ans.right[2].should.deep.equal a:5, b:3
+    ans.right[3].should.deep.equal a:8, b:8
