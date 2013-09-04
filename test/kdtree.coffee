@@ -90,37 +90,44 @@ describe "KD-tree", ->
     it "should expect all objects to have (at least) the keys that are specified in second argument", ->
       (-> new KDtree [{a:1, b:2},{a:2, b:5},{b:3}], attributes: ['a']).should.throw "Expecting all objects to have at least the same keys as first object or second parameter"
 
-  describe "stack overflow", ->
+  describe.skip "stack overflow", ->
     testCase = require './test-cases/simple'
     objects = testCase.objects
 
-    # it "should construct tree while combining duplicate nodes", ->
-    #   # Use test-case while duplicating each point once
-    #   objects = testCase.objects.concat
-    #   tree = new KDtree objects, {attributes: ["attr_a", "attr_b"]}
-    #   expect(tree).to.be.instanceof KDtree
-    #   expect(tree.getRoot().val).to.be.an.array
-    #   expect(tree.getRoot().val[0].label).to.equal "G"
-    #   expect(tree.getRoot().val[1].label).to.equal "G"
-    #   expect(tree.getRoot().right.val).to.be.an.array
+    it "should construct tree while combining duplicate nodes", ->
+      # Use test-case while duplicating each point once
+      objects = testCase.objects.concat objects
+      tree = new KDtree objects, {attributes: ["attr_a", "attr_b"]}
+      # console.log require('util').inspect tree.getRoot(), colors: true, depth: 9
+      expect(tree).to.be.instanceof KDtree
+      expect(tree.getRoot().val).to.be.an.array
+      expect(tree.getRoot().val[0].label).to.equal "G"
+      expect(tree.getRoot().val[1].label).to.equal "G"
+      expect(tree.getRoot().right.val).to.be.an.array
 
-    # it "should be able to handle ~50k rows without throwing SO", ->
-    #   # Since we have 12 objects, doubling it up 12 times gives up ~50k rows
-    #   for i in [1..11]
-    #     objects = objects.concat objects
+    it "should be able to handle ~50k rows without throwing SO", ->
+      # Since we have 12 objects, doubling it up 12 times gives up ~50k rows
+      for i in [1..11]
+        objects = objects.concat objects
 
-    #   console.log "Building tree with #{objects.length} number of rows"
-    #   tree = new KDtree objects, {attributes: ["attr_a", "attr_b"]}
-    #   expect(tree).to.be.instanceof KDtree
+      console.log "Building tree with #{objects.length} number of rows"
+      d = Date.now()
+      tree = new KDtree objects, {attributes: ["attr_a", "attr_b"]}
+      console.log "Finished in #{Date.now() - d}"
+      expect(tree).to.be.instanceof KDtree
 
-    # it "should be able to handle ~100k rows without throwing SO", ->
-    #   objects = objects.concat objects
-    #   console.log "Building tree with #{objects.length} number of rows"
-    #   tree = new KDtree objects, {attributes: ["attr_a", "attr_b"]}
-    #   expect(tree).to.be.instanceof KDtree
+    it "should be able to handle ~100k rows without throwing SO", ->
+      objects = objects.concat objects
+      console.log "Building tree with #{objects.length} number of rows"
+      d = Date.now()
+      tree = new KDtree objects, {attributes: ["attr_a", "attr_b"]}
+      console.log "Finished in #{Date.now() - d}"
+      expect(tree).to.be.instanceof KDtree
 
-    # it "should be able to handle ~200k rows without throwing SO", ->
-    #   objects = objects.concat objects
-    #   console.log "Building tree with #{objects.length} number of rows"
-    #   tree = new KDtree objects, {attributes: ["attr_a", "attr_b"]}
-    #   expect(tree).to.be.instanceof KDtree
+    it "should be able to handle ~200k rows without throwing SO", ->
+      objects = objects.concat objects
+      console.log "Building tree with #{objects.length} number of rows"
+      d = Date.now()
+      tree = new KDtree objects, {attributes: ["attr_a", "attr_b"]}
+      console.log "Finished in #{Date.now() - d}"
+      expect(tree).to.be.instanceof KDtree
