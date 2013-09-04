@@ -5,7 +5,7 @@ A naive implementation for a (Min) Priority Queue with an upper-bound. Will main
 
 #### Instance methods:
 
-- insert(object, priority) - Inserts object in priority queue.
+- insert(array/object, priority) - Inserts object(s) in priority queue.
 - getMaxPriority( ) - Returns the largest priority in queue.
 - getMinPriority( ) - Returns the smallest priority in queue.
 - getObjects( ) - Returns Array of all objects in queue -- length depends on size upon construction.
@@ -27,10 +27,12 @@ Class definition with some "private" variables
 
 **insert**: (obj, priority) - Inserts the object onto the heap.
 
-      insert: (obj, priority) ->
-        @queue.push
-          obj: obj
-          priority: priority
+      insert: (array, priority) ->
+        array = [array] unless array.length
+        for obj in array
+          @queue.push
+            obj: obj
+            priority: priority
 
 **getObjects**: Returns the queue as an Array
 

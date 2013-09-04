@@ -54,19 +54,37 @@ Given an array of objects, require key parameter identifying the attribute to ca
 
 Given an array of attributes and an array of objects, return an object describing the stdv per attribute.
 
-    exports.allStdvs = (keys, objects) ->
+    exports.allStdvs = (attributes, objects, key) ->
       stdvs = {}
-      for attr in keys
+      objects = (key(o) for o in objects) if key
+      for attr in attributes
         stdvs[attr] = exports.stdv(objects, attr)
       stdvs
 
 #### Get index of the median
 
-Given an array of numbers, return the lowest index of the median value.
+Given an array of sorted numbers, return the index bounds of the median value.
 
     exports.medianIndex = (array) ->
-      medianVal = array[Math.floor array.length / 2]
-      array.indexOf medianVal
+      median = Math.floor array.length / 2
+      medianVal = array[median]
+      lower: array.indexOf medianVal
+      upper: array.lastIndexOf(medianVal) + 1
+      median: median
+
+#### Get splits from sorted array of objects and median bounds
+
+Given an array of sorted objects and the median bounds, return object with an array of identical objects and arrays of remaining objects for left and right.
+
+    exports.getSplit = (objects, bounds, attributes, current_attr, key = (o) -> o) ->
+      medianObj = objects[bounds.median]
+      identicals = (obj: o, ind: i for o,i in objects when attributes.every (a) -> key(medianObj)[a] is key(o)[a])
+      pickedIndices = (x.ind for x in identicals)
+
+      identicals: (x.obj for x in identicals)
+      left: (o for o,i in objects when key(o)[current_attr] < key(medianObj)[current_attr] and i not in pickedIndices)
+      right: (o for o,i in objects when key(o)[current_attr] >= key(medianObj)[current_attr] and i not in pickedIndices)
+
 
 #### ---  meta-utils  ---
 
