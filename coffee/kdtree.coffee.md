@@ -51,7 +51,7 @@ Make sure that all objects have the `@options.attributes`
 
 We precalculate the Standard Deviations for each attribute, so we can perform standardized queries.
 
-        @stdv = util.allStdvs @options.attributes, @objects
+        @stdv = util.allStdvs @options.attributes, @objects, @options.key
 
 Looping over each attribute in a round-robin fashion, do the following:
 

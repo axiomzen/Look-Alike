@@ -54,9 +54,10 @@ Given an array of objects, require key parameter identifying the attribute to ca
 
 Given an array of attributes and an array of objects, return an object describing the stdv per attribute.
 
-    exports.allStdvs = (keys, objects) ->
+    exports.allStdvs = (attributes, objects, key) ->
       stdvs = {}
-      for attr in keys
+      objects = (key(o) for o in objects) if key
+      for attr in attributes
         stdvs[attr] = exports.stdv(objects, attr)
       stdvs
 

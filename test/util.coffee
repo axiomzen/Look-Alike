@@ -28,6 +28,10 @@ describe 'Standard Deviations on data', ->
   it 'should be able to construct an object describing each attribute\'s stdv', ->
     utils.allStdvs(["a", "b"], [{ a: 1, b: 3 }, { a: 5, b: 5 }, { a: 9, b: 7 }])
       .should.eql({ a: Math.sqrt(32/3), b: Math.sqrt(8/3) })
+  it 'should be able to construct an object describing each attribute\'s stdv with a key parameter', ->
+    key = (o) -> o.x
+    utils.allStdvs(["a", "b"], [{x: { a: 1, b: 3 }}, {x: { a: 5, b: 5 }}, {x: { a: 9, b: 7 }}], key)
+      .should.eql({ a: Math.sqrt(32/3), b: Math.sqrt(8/3) })
 
 describe 'Standardized Euclidean Distance function', ->
   it 'should accept 2 objects and the stdv for 1 dimension', ->
