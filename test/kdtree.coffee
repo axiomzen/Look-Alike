@@ -90,9 +90,12 @@ describe "KD-tree", ->
     it "should expect all objects to have (at least) the keys that are specified in second argument", ->
       (-> new KDtree [{a:1, b:2},{a:2, b:5},{b:3}], attributes: ['a']).should.throw "Expecting all objects to have at least the same keys as first object or second parameter"
 
-  describe.skip "stack overflow", ->
+  describe "stack overflow", ->
     testCase = require './test-cases/simple'
     objects = testCase.objects
+    profile1 = testCase.subject1
+    profile2 = testCase.subject2
+    tree = {}
 
     it "should construct tree while combining duplicate nodes", ->
       # Use test-case while duplicating each point once
@@ -123,6 +126,16 @@ describe "KD-tree", ->
       tree = new KDtree objects, {attributes: ["attr_a", "attr_b"]}
       console.log "Finished in #{Date.now() - d}"
       expect(tree).to.be.instanceof KDtree
+
+    it "should support super fast queries for k = 10", ->
+      expect(tree.query(profile1, k: 10)).to.have.length 10
+      expect(tree.query(profile2, k: 10)).to.have.length 10
+    it "should support super fast queries for k = 100", ->
+      expect(tree.query(profile1, k: 100)).to.have.length 100
+      expect(tree.query(profile2, k: 100)).to.have.length 100
+    it "should support super fast queries for k = 1000", ->
+      expect(tree.query(profile1, k: 1000)).to.have.length 1000
+      expect(tree.query(profile2, k: 1000)).to.have.length 1000
 
     it "should be able to handle ~200k rows without throwing SO", ->
       objects = objects.concat objects
