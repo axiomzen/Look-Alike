@@ -43,7 +43,7 @@ describe "KD-tree", ->
     tree = new KDtree [{x:1,y:2,z:3, label:'a'}, {x:5.1,y:2,z:7, label:'b'}, {x:3,y:3,z:4, label:'c'}, {x:5,y:5,z:5, label:'d'}, {x:9,y:0,z:1, label:'e'}, {x:10,y:1,z:3, label:'f'}, {x:5.2,y:3,z:7, label:'g'}, {x:3,y:9,z:9, label:'h'}, {x:8,y:8,z:8, label:'i'}], attributes: ["x", "y", "z"]
     it "should return an instance of KD-tree", ->
       expect(tree).to.be.instanceof KDtree
-      console.log require('util').inspect tree.getRoot(), colors: true, depth: 5
+      # console.log require('util').inspect tree.getRoot(), colors: true, depth: 5
 
     it "should have the root at x = 5", ->
       expect(tree.getRoot().val[0]).to.deep.equal {label: 'b', x:5.1, y:2, z:7}

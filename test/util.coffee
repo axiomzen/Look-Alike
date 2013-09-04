@@ -69,3 +69,25 @@ describe 'Get array of identical objects, given sorted array and median bounds',
     ans.right[1].should.deep.equal a:2, b:5
     ans.right[2].should.deep.equal a:5, b:3
     ans.right[3].should.deep.equal a:8, b:8
+  it 'should accept key parameter as well', ->
+    objects = [{x: {a:1, b:2} },{x: {a:2, b:3} }, {x: {a:2, b:5} },{x: {a:2, b:3} }, {x: {a:2, b:3} }, {x: {a:2, b:5} },{x: {a:2, b:3} }, {x: {a:5, b:3} }, {x: {a:8, b:8} }]
+    attributes = ["a", "b"]
+    bounds =
+      median: 3
+      lower: 1
+      upper: 5
+    current_attr = "a"
+    key = (o) -> o.x
+    ans = utils.getSplit objects, bounds, attributes, current_attr, key
+    ans.identicals.should.be.an.array
+    ans.identicals.should.have.length 4
+    ans.identicals[0].should.deep.equal x:{ a:2, b:3}
+    ans.identicals[1].should.deep.equal x:{ a:2, b:3}
+    ans.identicals[2].should.deep.equal x:{ a:2, b:3}
+    ans.left.should.have.length 1
+    ans.left[0].should.deep.equal x:{ a:1, b:2}
+    ans.right.should.have.length 4
+    ans.right[0].should.deep.equal x:{ a:2, b:5}
+    ans.right[1].should.deep.equal x:{ a:2, b:5}
+    ans.right[2].should.deep.equal x:{ a:5, b:3}
+    ans.right[3].should.deep.equal x:{ a:8, b:8}

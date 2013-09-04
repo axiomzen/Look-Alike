@@ -19,6 +19,7 @@ describe 'KD-tree simple queries', ->
   it 'should accept a key parameter for objects', ->
     key = (o) -> o.x
     tree = new KDtree [{x: {a:1}}, {x: {a:2}}, {x: {a:3}}], {attributes: ['a'], key: key}
+    # console.log require('util').inspect tree, colors: true, depth: 8
     expect(tree.query(a:1, {k: 1, normalize: false})).to.eql([{x: {a:1}}])
   it 'should accept a key parameter for nested objects', ->
     tree = new KDtree [{x: {y: {a:1}}}, {x: {y: {a:2}}}], {attributes: ['a'], key: (o) -> o.x.y}

@@ -76,15 +76,14 @@ Given an array of sorted numbers, return the index bounds of the median value.
 
 Given an array of sorted objects and the median bounds, return object with an array of identical objects and arrays of remaining objects for left and right.
 
-    exports.getSplit = (objects, bounds, attributes, current_attr) ->
+    exports.getSplit = (objects, bounds, attributes, current_attr, key = (o) -> o) ->
       medianObj = objects[bounds.median]
-      candidates = objects.slice bounds.lower, bounds.upper
-      identicals = (obj: o, ind: i for o,i in objects when attributes.every (a) -> medianObj[a] is o[a])
+      identicals = (obj: o, ind: i for o,i in objects when attributes.every (a) -> key(medianObj)[a] is key(o)[a])
       pickedIndices = (x.ind for x in identicals)
 
       identicals: (x.obj for x in identicals)
-      left: (o for o,i in objects when o[current_attr] < medianObj[current_attr] and i not in pickedIndices)
-      right: (o for o,i in objects when o[current_attr] >= medianObj[current_attr] and i not in pickedIndices)
+      left: (o for o,i in objects when key(o)[current_attr] < key(medianObj)[current_attr] and i not in pickedIndices)
+      right: (o for o,i in objects when key(o)[current_attr] >= key(medianObj)[current_attr] and i not in pickedIndices)
 
 
 #### ---  meta-utils  ---

@@ -42,7 +42,7 @@ Make sure that all objects have the `@options.attributes`
 
         unless @objects.every((x) =>
           @options.attributes.every((k) =>
-            if @options?.key
+            if @options.key
               @options.key(x).hasOwnProperty k
             else
               x.hasOwnProperty k))
@@ -77,8 +77,11 @@ To find the node we split through, we sort the objects and find the median. If w
 
 In order to handle cases where we have multiple points on the same spot, we want to combine identical objects in an array. Many identical objects can result in very deep trees, resulting in imbalance and stack overflows. The `medianIndex` will return the lower and upper bounds of the array between which the current attribute has same value. `getSplit` will return an object that contains an array of identical objects (compared to the median object) and splits for left and right branch.
 
-          bounds = util.medianIndex (o[attr] for o in objects)
-          splits = util.getSplit objects, bounds, @options.attributes, attr
+
+          temp = objects
+          temp = (@options.key(o) for o in objects) if @options.key
+          bounds = util.medianIndex (o[attr] for o in temp)
+          splits = util.getSplit objects, bounds, @options.attributes, attr, @options.key
 
 Now store the current array of objects in `val` of the splitting node, and recursively build up the left and right branches of the tree and increasing the depth.
 
