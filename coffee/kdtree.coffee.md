@@ -128,7 +128,7 @@ Initialize a BPQ with size `k`.
 
           len = @options.attributes.length
           attr = @options.attributes[depth % len]
-          objectValues = if @options?.key then @options?.key(node.val) else node.val
+          objectValues = if @options?.key then @options?.key(node.val[0]) else node.val[0]
 
  - Insert the current node into the queue, with priority being the distance between point and subject. If normalize is true (default), then calculate distances with standard deviations. When weights are given, they will be applied in `util.distance`. If `weights` is undefined, it will be ignored.
 
@@ -138,9 +138,13 @@ Initialize a BPQ with size `k`.
             dist = util.distance subject, objectValues, weights: options.weights
 
  - If we have a filter, we would only insert the node into the queue if it passes the filter (i.e. returns true)
+ - node.val is an array that contain multiple objects with identical attributes -- they need to be filtered individually.
 
           options = options || {}
-          if (not options.filter) or options.filter node.val
+          if options.filter
+            for o in node.val
+              Q.insert o, dist if options.filter o
+          else
             Q.insert node.val, dist
 
  - Recursively search the half of the tree that contains the test point (on the next dimension)
