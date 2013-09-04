@@ -67,7 +67,7 @@ Looping over each attribute in a round-robin fashion, do the following:
           len = @options.attributes.length
           attr = @options.attributes[depth % len]
 
-To find the node we split through, we sort the objects and find the median. However, it is possible that the nodes left to the median has the same value as the median, resulting in an inconsistent split -- so we need to find the index to split by, which would be the lowest index of the median value. If we have a key function, apply it. The latter is useful of we have an object where the relevant attributes are nested in some other object.
+To find the node we split through, we sort the objects and find the median. If we have a key function, apply it. The latter is useful of we have an object where the relevant attributes are nested in some other object.
 
           objects.sort (a,b) ->
             if @options?.key
@@ -75,14 +75,17 @@ To find the node we split through, we sort the objects and find the median. Howe
             else
               a[attr] - b[attr]
 
-          median = util.medianIndex (o[attr] for o in objects)
+In order to handle cases where we have multiple points on the same spot, we want to combine identical objects in an array. Many identical objects can result in very deep trees, resulting in imbalance and stack overflows. The `medianIndex` will return the lower and upper bounds of the array between which the current attribute has same value. `getSplit` will return an object that contains an array of identical objects (compared to the median object) and splits for left and right branch.
 
-Now store the current object in `val` of the splitting node, and recursively build up the left and right branches of the tree and increasing the depth.
+          bounds = util.medianIndex (o[attr] for o in objects)
+          splits = util.getSplit objects, bounds, @options.attributes, attr
+
+Now store the current array of objects in `val` of the splitting node, and recursively build up the left and right branches of the tree and increasing the depth.
 
           node =
-            val: objects[median]
-            left: _helper(objects.slice(0,median), depth + 1)
-            right: _helper(objects.slice(median + 1), depth + 1)
+            val: splits.identicals
+            left: _helper(splits.left, depth + 1)
+            right: _helper(splits.right, depth + 1)
 
 With our `_helper` function defined, we can now trigger the tree to be build.
 
