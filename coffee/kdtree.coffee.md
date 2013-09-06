@@ -123,9 +123,11 @@ Initialize a BPQ with size `k`.
 
         BPQ = require './bpq'
         Q = new BPQ options.k
+        count = 0
 
         _helper = (node, depth) =>
           return null unless node
+          count++
 
 `depth` determines which attribute we are checking now. Apply `key` function if applicable.
 
@@ -186,6 +188,8 @@ Initialize a BPQ with size `k`.
 Start at the root:
 
         root = @getRoot()
-        if root is null then return [] else _helper root, 0
+        ans = if root is null then [] else _helper root, 0
+        console.log count + " recursions"
+        ans
 
     module.exports = KDtree

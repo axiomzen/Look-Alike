@@ -126,7 +126,7 @@ describe "querying k-Nearest Neighbors on a KDtree", ->
         getLabels(tree.query(profile2, options)).should.eql(['E', 'A', 'I'])
         getLabels(tree.query(profile3, options)).should.eql(['B', 'J', 'L'])
 
-describe.skip "Benchmarking multi-dimensional data, standardize and ", ->
+describe.skip "Benchmarking multi-dimensional data, standardize and a lot of duplicate points ", ->
   testCase = require './test-cases/large'
   objects3 = testCase.objects3
   objects4 = testCase.objects4
@@ -142,16 +142,13 @@ describe.skip "Benchmarking multi-dimensional data, standardize and ", ->
     objects4 = objects4.concat objects4
     objects5 = objects5.concat objects5
 
-  it "build 3d tree", ->
-    console.log "Building tree with #{objects3.length} number of rows"
+  it "build 3d tree with #{objects3.length} number of rows", ->
     tree3 = new KDtree objects3, attributes: (k for k,v of profile3)
 
-  it "build 4d tree", ->
-    console.log "Building tree with #{objects4.length} number of rows"
+  it "build 4d tree with #{objects3.length} number of rows", ->
     tree4 = new KDtree objects4, attributes: (k for k,v of profile4)
 
-  it "build 5d tree, with key parameter", ->
-    console.log "Building tree with #{objects5.length} number of rows"
+  it "build 5d tree, with key parameter with #{objects3.length} number of rows", ->
     tree5 = new KDtree objects5, attributes: (k for k,v of profile5), key: (o) -> o.vals
 
   it "3-dimensional large-scale query", ->
@@ -162,3 +159,37 @@ describe.skip "Benchmarking multi-dimensional data, standardize and ", ->
 
   it "5-dimensional large-scale query", ->
     tree5.query(profile5, k:8000, standardize: true, weights: { attr_a: 0.2, attr_b: 0.3, attr_c: 0.3, attr_d: 0.1, attr_e: 0.1 })
+
+describe "Benchmarking multi-dimensional data, large-scale randomized with overlap", ->
+  objects = []
+  for x in [0..50000]
+    objects.push
+      a: Math.floor(Math.random() * 5)
+      b: Math.floor(Math.random() * 5)
+      c: Math.floor(Math.random() * 5)
+      d: Math.floor(Math.random() * 5)
+      e: Math.floor(Math.random() * 5)
+      data: "Some random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is random data that is.. "
+      more: Math.random()
+  subject = objects.pop()
+  tree3 = {}
+  tree4 = {}
+  tree5 = {}
+  tree6 = {}
+  it "build 3d tree with #{objects.length} number of rows", ->
+    tree3 = new KDtree objects, attributes: ["a", "b", "c"]
+  it "build 4d tree with #{objects.length} number of rows", ->
+    tree4 = new KDtree objects, attributes: ["a", "b", "c", "d"]
+  it "build 5d tree with #{objects.length} number of rows", ->
+    tree5 = new KDtree objects, attributes: ["a", "b", "c", "d", "e"]
+  it "build 6d tree with #{objects.length} number of rows", ->
+    tree6 = new KDtree objects, attributes: ["a", "b", "c", "d", "e", "more"]
+    #console.log require('util').inspect tree.getRoot(), colors: true, depth: 5
+  it "3-dimensional large-scale query to get top 10000", ->
+    tree3.query(subject, k:10000, standardize: true, weights: { a: 0.2, b: 0.3, c: 0.4})
+  it "4-dimensional large-scale query to get top 10000", ->
+    tree4.query(subject, k:10000, standardize: true, weights: { a: 0.2, b: 0.3, c: 0.3, d: 0.2})
+  it "5-dimensional large-scale query to get top 10000", ->
+    tree5.query(subject, k:10000, standardize: true, weights: { a: 0.2, b: 0.3, c: 0.3, d: 0.1, e: 0.1 })
+  it "6-dimensional large-scale query to get top 10000", ->
+    tree6.query(subject, k:10000, standardize: true, weights: { a: 0.2, b: 0.3, c: 0.2, d: 0.1, e: 0.1, more: 0.1 })
