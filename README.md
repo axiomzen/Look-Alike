@@ -1,6 +1,6 @@
 Look-Alike
 ===========
-[![Build Status](https://travis-ci.org/axiomzen/Look-Alike.png?branch=master)](https://travis-ci.org/axiomzen/Look-Alike)
+[![Build Status](http://travis-ci.org/axiomzen/Look-Alike.png?branch=master)](https://travis-ci.org/axiomzen/Look-Alike)
 
 Twin brother of [Alike](https://github.com/axiomzen/Alike). They look quite alike. Except this brother is more heavy-weight and likes playing in trees.
 
