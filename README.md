@@ -1,6 +1,7 @@
 Look-Alike
 ===========
 [![Build Status](http://travis-ci.org/axiomzen/Look-Alike.png?branch=master)](https://travis-ci.org/axiomzen/Look-Alike)
+<a href="https://zenhub.io"><img src="https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png" height="18px"></a>
 
 Twin brother of [Alike](https://github.com/axiomzen/Alike). They look quite alike. Except this brother is more heavy-weight and likes playing in trees.
 
@@ -65,5 +66,3 @@ Unit tests are in the `test/` folder. You can run the tests with `npm test` or i
 ## License
 
 Look-Alike is licensed under the terms of the [GNU Lesser General Public License](http://www.gnu.org/licenses/lgpl.html), known as the LGPL.
-
-[![Powered by ZenHub.io](https://raw.github.com/axiomzen/zenhub-now/master/powered-by-zenhub-720.png)](https://zenhub.io)
